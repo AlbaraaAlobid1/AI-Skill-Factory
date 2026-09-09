@@ -8,6 +8,30 @@ Instead of manually designing prompts, instructions, metadata, examples, and tes
 
 The platform handles the rest.
 
+## ✨ New Features (v0.1)
+
+### 🤖 Multi-Provider AI Integration
+- **OpenAI** support (GPT-4o, GPT-4o-mini, GPT-4-turbo, GPT-3.5-turbo)
+- **Anthropic** support (Claude 3.5 Sonnet, Haiku, Opus)
+- Extensible provider architecture for adding new AI providers
+- Secure API key storage in browser localStorage
+- Configurable base URLs for custom endpoints
+
+### 🌍 Internationalization (i18n)
+- **English** (default)
+- **العربية (Arabic)** with full RTL support
+- Language selection persisted in settings
+- All UI text translated including examples and pipeline steps
+- RTL layout support for Arabic
+
+### ⚙️ Settings Panel
+- AI Provider selection (OpenAI / Anthropic)
+- Model selection per provider
+- API Key management with show/hide toggle
+- Optional custom Base URL for OpenAI-compatible endpoints
+- Language selector with instant UI update
+- Settings persisted across sessions
+
 ---
 
 ## 🚀 The Vision
@@ -351,7 +375,7 @@ This reduces unnecessary complexity and allows the MVP to use a unified technolo
 
 # 🌐 Frontend
 
-### Next.js
+### Next.js (App Router)
 
 Main application framework.
 
@@ -361,27 +385,27 @@ Used for:
 - Dashboard
 - Skill generator interface
 - Skill editor
-- Server-side functionality
+- Server-side functionality (API Routes)
 
 ### React
 
 Used for the component-based UI architecture.
 
-### Tailwind CSS
+### Custom CSS (CSS Variables)
 
-Used for styling and rapid UI development.
-
-### shadcn/ui
-
-Used for reusable interface components.
+Used for styling with design tokens (no Tailwind dependency).
 
 ### Lucide React
 
 Used for icons.
 
-### React Hook Form
+### Zustand
 
-Used for complex and validated user forms.
+Lightweight state management for settings persistence.
+
+### next-intl (planned)
+
+For advanced i18n routing (currently using custom lightweight solution).
 
 ---
 
@@ -389,28 +413,28 @@ Used for complex and validated user forms.
 
 ### Vercel AI SDK
 
-The AI layer should support multiple providers.
+The AI layer supports multiple providers.
 
-Initial providers:
+Implemented providers:
 
-- OpenAI
-- Anthropic
+- **OpenAI** (GPT-4o, GPT-4o-mini, GPT-4-turbo, GPT-3.5-turbo)
+- **Anthropic** (Claude 3.5 Sonnet, Haiku, Opus)
 
 Example architecture:
 
 ```text
                     AI Provider Layer
                            │
-            ┌──────────────┼──────────────┐
-            │              │              │
-         OpenAI        Anthropic      Future Providers
-            │              │              │
-            └──────────────┼──────────────┘
+             ┌──────────────┼──────────────┐
+             │              │              │
+          OpenAI        Anthropic      Future Providers
+             │              │              │
+             └──────────────┼──────────────┘
                            │
-                      AI Pipeline
+                       AI Pipeline
 ```
 
-Recommended packages:
+Installed packages:
 
 ```text
 ai
@@ -418,7 +442,7 @@ ai
 @ai-sdk/anthropic
 ```
 
-The project must avoid permanent dependency on a single AI provider.
+The project avoids permanent dependency on a single AI provider through the provider abstraction layer in `src/ai/providers.ts`.
 
 ---
 
@@ -714,44 +738,58 @@ Potential providers:
 
 ---
 
-# 📁 Proposed Project Structure
+# 📁 Project Structure
 
 ```text
 ai-skill-factory/
 │
 ├── src/
 │   │
-│   ├── app/                 # Next.js App Router
+│   ├── app/                    # Next.js App Router
+│   │   ├── api/
+│   │   │   └── generate-skill/ # Skill generation API endpoint
+│   │   ├── globals.css         # Global styles with CSS variables
+│   │   ├── layout.tsx          # Root layout
+│   │   └── page.tsx            # Main page (client component)
 │   │
-│   ├── components/          # UI Components
+│   ├── ai/                     # AI Pipeline
+│   │   ├── providers.ts        # Multi-provider abstraction (OpenAI, Anthropic)
+│   │   ├── requirement-analyzer.ts  # Requirement analysis module
+│   │   ├── skill-architect.ts       # Skill architecture design
+│   │   ├── skill-generator.ts       # Skill file generation
+│   │   └── index.ts                  # AI pipeline exports
 │   │
-│   ├── ai/                  # AI Pipeline
-│   │   ├── requirement-analyzer.ts
-│   │   ├── skill-architect.ts
-│   │   ├── skill-generator.ts
-│   │   ├── test-generator.ts
-│   │   └── evaluator.ts
+│   ├── components/             # UI Components
+│   │   └── SettingsModal.tsx   # Settings modal with provider/lang config
 │   │
-│   ├── skills/              # Skill handling
+│   ├── i18n/                   # Internationalization
+│   │   ├── index.ts            # Translation utilities
+│   │   ├── locales.ts          # Locale definitions (en, ar)
+│   │   └── messages/
+│   │       ├── en.json         # English translations
+│   │       └── ar.json         # Arabic translations (RTL)
+│   │
+│   ├── settings/               # Settings Management
+│   │   └── store.ts            # Zustand store with localStorage persistence
+│   │
+│   ├── skills/                 # Skill handling (planned)
 │   │   ├── parser.ts
 │   │   ├── generator.ts
 │   │   └── exporter.ts
 │   │
-│   ├── validator/           # Validation Engine
+│   ├── validator/              # Validation Engine (planned)
 │   │   ├── structure.ts
 │   │   ├── metadata.ts
 │   │   ├── instructions.ts
 │   │   └── security.ts
 │   │
-│   ├── schemas/             # Zod Schemas
+│   ├── schemas/                # Zod Schemas (planned)
 │   │
-│   ├── lib/                 # Utilities
-│   │
-│   └── db/                  # Database
+│   └── lib/                    # Utilities (planned)
 │
-├── tests/
+├── tests/                      # Test files (planned)
 │
-├── public/
+├── public/                     # Static assets
 │
 └── README.md
 ```
@@ -766,45 +804,49 @@ ai-skill-factory/
 - [x] Define product positioning
 - [x] Define initial architecture
 - [x] Select the initial technology stack
-- [ ] Define the first supported Skill format
+- [x] Define the first supported Skill format
 
 ---
 
 ## Phase 1 — Foundation
 
-- [ ] Initialize Next.js
-- [ ] Configure TypeScript
-- [ ] Configure Tailwind CSS
-- [ ] Install shadcn/ui
-- [ ] Create initial UI
-- [ ] Set up project structure
+- [x] Initialize Next.js (App Router)
+- [x] Configure TypeScript
+- [x] Configure CSS Variables design system
+- [x] Install Lucide React for icons
+- [x] Create initial UI (composer + output panels)
+- [x] Set up project structure
+- [x] **Add multi-provider AI infrastructure (OpenAI, Anthropic)**
+- [x] **Add internationalization (English + Arabic with RTL)**
+- [x] **Add settings panel with persistence**
 
 ---
 
 ## Phase 2 — Requirement Analysis
 
-- [ ] User requirement input
-- [ ] Requirement Analyzer
-- [ ] Structured requirement output
-- [ ] Zod validation
+- [x] User requirement input (with examples)
+- [x] Requirement Analyzer (AI-powered)
+- [x] Structured requirement output (Zod validated)
+- [x] Zod validation
 
 ---
 
 ## Phase 3 — Skill Architecture
 
-- [ ] Capability detection
-- [ ] Input/output definition
-- [ ] Rule generation
-- [ ] Edge case analysis
+- [x] Capability detection
+- [x] Input/output definition (JSON Schema)
+- [x] Rule generation
+- [x] Edge case analysis
 
 ---
 
 ## Phase 4 — Skill Generation
 
-- [ ] Generate `SKILL.md`
-- [ ] Generate metadata
-- [ ] Generate examples
-- [ ] Generate tests
+- [x] Generate `SKILL.md`
+- [x] Generate metadata (`metadata.json`)
+- [x] Generate examples (basic + advanced)
+- [x] Generate tests (basic + edge cases)
+- [x] Generate evaluation config
 
 ---
 
@@ -832,10 +874,134 @@ ai-skill-factory/
 - [ ] Stable generation pipeline
 - [ ] Validation reports
 - [ ] Test results
-- [ ] Skill export
+- [ ] Skill export (ZIP download)
 - [ ] Documentation
 
 ---
+
+# 🔌 API Usage
+
+## Generate Skill Endpoint
+
+```
+POST /api/generate-skill
+```
+
+### Request Body
+
+```json
+{
+  "idea": "I need an AI skill that analyzes German bureaucratic letters and explains them in Arabic",
+  "provider": "openai",
+  "model": "gpt-4o",
+  "apiKey": "sk-...",
+  "baseURL": "https://api.openai.com/v1",
+  "language": "en"
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "skill": {
+    "name": "german-letter-analyzer",
+    "version": "0.1.0",
+    "description": "Analyzes German bureaucratic letters and provides Arabic explanations",
+    "files": {
+      "SKILL.md": "# german-letter-analyzer\n\n...",
+      "metadata.json": "{...}",
+      "examples/basic-example.md": "# Basic Example\n...",
+      "examples/advanced-example.md": "# Advanced Example\n...",
+      "tests/basic-tests.json": "[...]",
+      "tests/edge-cases.json": "[...]",
+      "evaluation/evaluation-config.json": "{...}"
+    }
+  }
+}
+```
+
+### Supported Providers & Models
+
+| Provider | Models |
+|----------|--------|
+| OpenAI | `gpt-4o`, `gpt-4o-mini`, `gpt-4-turbo`, `gpt-3.5-turbo` |
+| Anthropic | `claude-3-5-sonnet-20241022`, `claude-3-5-haiku-20241022`, `claude-3-opus-20240229`, `claude-3-sonnet-20240229` |
+
+### Language Support
+
+| Code | Language | Direction |
+|------|----------|-----------|
+| `en` | English | LTR |
+| `ar` | Arabic | RTL |
+
+---
+
+# 🎨 UI Features
+
+## Settings Modal
+
+Accessible via the gear icon in the top navigation. Provides:
+
+- **AI Provider Selection**: Switch between OpenAI and Anthropic
+- **Model Selection**: Per-provider model dropdown
+- **API Key Input**: Secure password field with visibility toggle
+- **Base URL** (Optional): For OpenAI-compatible endpoints
+- **Language Selector**: English / العربية with instant UI update
+
+Settings are persisted to `localStorage` and survive page reloads.
+
+## RTL Support
+
+When Arabic is selected:
+- Layout direction switches to RTL
+- Text alignment adjusts automatically
+- Icons and spacing mirror appropriately
+- Form inputs support RTL text entry
+
+---
+
+# 📦 Installation & Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Run linting
+npm run lint
+```
+
+## Environment Variables
+
+No environment variables required for the frontend. API keys are provided via the settings UI and stored in browser localStorage.
+
+For production deployments, consider using a backend proxy to avoid exposing API keys to the client.
+
+---
+
+# 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run `npm run lint` and `npm run build`
+5. Submit a pull request
+
+---
+
+# 📄 License
+
+MIT License - feel free to use this project for learning or commercial purposes.
 
 # 🔮 Future Development
 

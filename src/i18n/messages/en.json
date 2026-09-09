@@ -1,0 +1,65 @@
+{
+  "app": {
+    "name": "AI Skill Factory",
+    "tagline": "Build the capability. Skip the scaffolding."
+  },
+  "nav": {
+    "help": "Help",
+    "account": "Account",
+    "settings": "Settings"
+  },
+  "hero": {
+    "workspace": "Skill workspace / New project",
+    "title": "Build the capability.",
+    "subtitle": "Skip the scaffolding.",
+    "description": "Describe what your AI should do. We turn the idea into a structured, testable skill ready for production."
+  },
+  "composer": {
+    "step": "01 / Describe",
+    "title": "What should your skill do?",
+    "placeholder": "I need an AI skill that...",
+    "hint": "Be specific about users, inputs, and desired outcomes.",
+    "generateButton": "Generate skill",
+    "generating": "Working...",
+    "examples": "Try an example"
+  },
+  "output": {
+    "step": "02 / Output",
+    "title": "Your skill blueprint",
+    "emptyTitle": "Your generated skill will appear here",
+    "emptyDescription": "We'll map the requirements into a clear architecture.",
+    "purpose": "Purpose",
+    "inputs": "Inputs",
+    "outputs": "Outputs",
+    "tags": ["Instructions", "Examples", "Test cases"],
+    "openEditor": "Open skill editor"
+  },
+  "pipeline": {
+    "label": "THE WORKFLOW",
+    "steps": ["Analyze", "Architect", "Generate", "Validate"]
+  },
+  "settings": {
+    "title": "Settings",
+    "aiProvider": "AI Provider",
+    "aiProviderDescription": "Select your AI provider for skill generation",
+    "model": "Model",
+    "apiKey": "API Key",
+    "apiKeyDescription": "Your API key will be stored securely",
+    "language": "Language",
+    "languageDescription": "Choose your preferred language",
+    "save": "Save Settings",
+    "saved": "Settings saved successfully",
+    "openai": "OpenAI",
+    "anthropic": "Anthropic",
+    "selectModel": "Select a model"
+  },
+  "footer": {
+    "version": "AI Skill Factory · v0.1 prototype",
+    "tagline": "Designed for builders who think in capabilities."
+  },
+  "examples": {
+    "germanLetters": "Explain German bureaucratic letters in Arabic",
+    "studentEmails": "Help students write professional emails to schools",
+    "requirementsReview": "Review product requirements for edge cases"
+  }
+}
